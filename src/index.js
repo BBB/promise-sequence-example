@@ -46,11 +46,11 @@ function promiseSeq( arr, predicate, consecutive=10 ) {
       return Promise.all(
         items.map(( item ) => {
           return predicate(item, ix)
-          .then(( result ) => {
-            results.push(result);
-          });
         })
-      ).then(() => results);
+      )
+      .then(( results ) => {
+        return results.concat(results);
+      });
     });
   }, Promise.resolve([]));
 
