@@ -50,11 +50,14 @@ function promiseSeq( arr, predicate, consecutive=10 ) {
     return prom.then(( results ) => {
       console.log('\nSET', ix);
       return Promise.all(
+        // then we build up the next set of simultaneous promises
         items.map(( item ) => {
+          // call the processing function
           return predicate(item, ix)
         })
       )
       .then(( results ) => {
+        // then push the results into the collected array
         return results.concat(results);
       });
     });
