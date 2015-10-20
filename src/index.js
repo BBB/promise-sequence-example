@@ -6,7 +6,12 @@ const xray = Xray();
 const urlsToGet = fs.readFileSync('./topsites.txt').toString('utf8').split(/\r?\n|\r/).slice(0, 10);
 
 const urlPromiseSequence = promiseSeq(urlsToGet, ( url, ix ) => {
+  console.log('\tStarting', url);
   return xrayPromise(`http://${ url }`, 'h1')
+  .then(( result ) => {
+    console.log('\tFinished', url, '-', JSON.stringify(result));
+    return result;
+  })
   .catch(( err ) => {
     // We want errors in this dataset to fail silently
     // this is because some sites may only accept https
@@ -43,6 +48,7 @@ function promiseSeq( arr, predicate, consecutive=10 ) {
   return chunkArray(arr, consecutive).reduce(( prom, items, ix ) => {
     // wait for the previous Promise.all() to resolve
     return prom.then(( results ) => {
+      console.log('\nSET', ix);
       return Promise.all(
         items.map(( item ) => {
           return predicate(item, ix)
