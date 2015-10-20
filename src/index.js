@@ -3,7 +3,7 @@ import fs from 'fs';
 
 const xray = Xray();
 
-const urlsToGet = fs.readFileSync('./topsites.txt').toString('utf8').split(/\r?\n|\r/).slice(0, 10);
+const urlsToGet = fs.readFileSync('./topsites.txt').toString('utf8').split(/\r?\n|\r/).slice(0, 50);
 
 const urlPromiseSequence = promiseSeq(urlsToGet, ( url, ix ) => {
   console.log('\tStarting', url);
