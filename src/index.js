@@ -47,7 +47,7 @@ function xrayPromise(...args) {
 function promiseSeq( arr, predicate, consecutive=10 ) {
   return chunkArray(arr, consecutive).reduce(( prom, items, ix ) => {
     // wait for the previous Promise.all() to resolve
-    return prom.then(( results ) => {
+    return prom.then(( allResults ) => {
       console.log('\nSET', ix);
       return Promise.all(
         // then we build up the next set of simultaneous promises
@@ -58,7 +58,7 @@ function promiseSeq( arr, predicate, consecutive=10 ) {
       )
       .then(( results ) => {
         // then push the results into the collected array
-        return results.concat(results);
+        return allResults.concat(results);
       });
     });
   }, Promise.resolve([]));
